@@ -5,11 +5,14 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const serviceAccount = require('./kinotes-firebase-adminsdk-d53iw-f30fbd1dbc.json');
+
 async function bootstrap() {
   if (!admin.apps.length) {
     admin.initializeApp({
-      credential: admin.credential.applicationDefault(),
-      databaseURL: 'https://guanathletics.firebaseio.com',
+      credential: admin.credential.cert(serviceAccount),
+      databaseURL: 'https://kinotes.firebaseapp.com',
     });
   }
 

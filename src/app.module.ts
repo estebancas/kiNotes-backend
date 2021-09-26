@@ -10,8 +10,9 @@ dotenv.config();
 
 const MODULES = [
   fromModules.AuthModule,
-  fromModules.ContentModule,
+  fromModules.NotesModule,
   fromModules.UserModule,
+  fromModules.RemindersModule,
 ];
 
 @Module({

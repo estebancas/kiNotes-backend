@@ -1,5 +1,5 @@
 {
-  "name": "guanathletics-backend",
+  "name": "kinotes-backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -7,11 +7,12 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "google:creds": "cp ./kinotes-firebase-adminsdk-d53iw-f30fbd1dbc.json ./dist",
+    "build": "nest build && npm run google:creds",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "export GOOGLE_APPLICATION_CREDENTIALS='guanathletics-firebase-adminsdk-t75z0-658fb07177.json'; nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
+    "start": "npm run build && nest start",
+    "start:dev": "npm run build && nest start --watch",
+    "start:debug": "npm run build && nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -35,7 +36,8 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.6"
+    "rxjs": "^6.6.6",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.6",

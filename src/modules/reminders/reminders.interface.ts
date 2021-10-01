@@ -1,6 +1,6 @@
 export interface Reminder {
   title: string;
-  createtAt: number;
+  createdAt: number;
   description: string;
   id: string;
 }

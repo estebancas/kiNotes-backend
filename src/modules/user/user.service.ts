@@ -97,7 +97,7 @@ export class UserService extends FirestoreService {
     }
   }
 
-  public async updateUserNotes(sub: string, note: Note): Promise<any> {
+  public async pushUserNote(sub: string, note: Note): Promise<Note> {
     try {
       const userRef = this.collection.doc(sub);
 
@@ -111,7 +111,7 @@ export class UserService extends FirestoreService {
     }
   }
 
-  public async updateUserReminders(sub: string, note: Note): Promise<any> {
+  public async updateUserReminders(sub: string, note: Note) {
     try {
       const userRef = this.collection.doc(sub);
 
@@ -120,6 +120,51 @@ export class UserService extends FirestoreService {
       });
 
       return note;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  public async deleteUserNote(sub: string, noteId: string): Promise<boolean> {
+    try {
+      const userRef = this.collection.doc(sub);
+      const user = await userRef.get();
+      const { notes } = user.data();
+
+      await userRef.update({
+        notes: (notes as Note[]).filter((note) => note.id !== noteId),
+      });
+
+      return true;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  public async updateUserNote(
+    sub: string,
+    noteId: string,
+    body: Note,
+  ): Promise<Note> {
+    try {
+      const userRef = this.collection.doc(sub);
+      const user = await userRef.get();
+      const { notes } = user.data();
+      let response = {};
+
+      await userRef.update({
+        notes: (notes as Note[]).map((note) => {
+          if (note.id === noteId) {
+            const updatedNote = { ...note, ...body, id: noteId };
+            note = updatedNote;
+            response = updatedNote;
+          }
+
+          return note;
+        }),
+      });
+
+      return response as Note;
     } catch (error) {
       throw new BadRequestException(error);
     }

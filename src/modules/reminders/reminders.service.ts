@@ -11,7 +11,7 @@ export class RemindersService {
   public async addReminder(sub: string, reminder: Reminder) {
     const updatedReminder: Reminder = {
       ...reminder,
-      createtAt: new Date().getTime(),
+      createdAt: new Date().getTime(),
       id: uuidv4(),
     };
 

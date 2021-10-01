@@ -1,4 +1,12 @@
-import { Controller, Put, UseGuards, Req, Get } from '@nestjs/common';
+import {
+  Controller,
+  Put,
+  UseGuards,
+  Req,
+  Get,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { Request } from 'express';
 
 import { NotesService } from './notes.service';
@@ -13,14 +21,31 @@ export class NotesController {
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  async addUserNote(@UserContext() user: User, @Req() request: Request) {
+  async pushUserNote(@UserContext() user: User, @Req() request: Request) {
     const data = request.body as Note;
-    return this.service.addNote(user.sub, data);
+    return this.service.pushNote(user.sub, data);
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
   async getUserNotes(@UserContext() user: User) {
     return this.service.getUserNotes(user.sub);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  async deleteUseNote(@UserContext() user: User, @Param('id') noteId: string) {
+    return this.service.deleteUserNote(user.sub, noteId);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  async updateUserNote(
+    @UserContext() user: User,
+    @Param('id') noteId: string,
+    @Req() request: Request,
+  ) {
+    const data = request.body as Note;
+    return this.service.updateUserNote(user.sub, noteId, data);
   }
 }
